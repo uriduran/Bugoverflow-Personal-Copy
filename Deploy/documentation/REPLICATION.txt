@@ -1,0 +1,71 @@
+1. Make sure mysql is installed, run on both Master and Slave:
+	sudo apt-get install mysql-server mysql-client
+
+2. Log into mysql bash and create a new replication user in both 
+   Master and Slave databases using:
+	CREATE USER 'replicator'@'%' IDENTIFIED BY 'itmd430';
+	GRANT ALL PRIVILEGES ON *.* TO 'replicator'@'%'
+    WITH GRANT OPTION;
+	
+3. Exit mysql bash, create the database from the schema file in both Master and Slave:
+	mysql -u root -p < /vagrant_data/database_schema.sql
+
+4. On Master edit the config file:
+	sudo vim /etc/mysql/my.cnf
+	
+	Change "bind-address" to your Master IP
+	Uncomment "server-id" and make sure its set to "1"
+	Uncomment "log_bin" and set it to "mysql.log"
+	Uncomment "binlog_do_db" and set it to "bugoverflow_database"
+	
+	Write and quit.
+
+5. Restart mysql
+6. Log back into mysql. And grant the replication user the following privileges:
+	GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%' IDENTIFIED BY 'itmd430';
+	
+	Then run:
+	FLUSH PRIVILEGES;
+7. Select the database:
+	USE bugoverflow_database;
+	
+	Then:
+	FLUSH TABLES WITH READ LOCK;
+	
+	Then:
+	SHOW MASTER STATUS;
+	
+	Write down the file and the position.
+	
+8. Unlock the database:
+	UNLOCK TABLES;
+	QUIT;
+
+9. On Slave edit the config file:
+	sudo vim /etc/mysql/my.cnf
+	
+	Uncomment "server-id" and make sure its set to "2"
+	Uncomment "log_bin" and set it to "mysql.log"
+	Uncomment "binlog_do_db" and set it to "bugoverflow_database"
+	Add in a line "relay-log = mysql-relay-bin.log
+	
+10. Restart mysql.
+11. Log back into mysql and run:
+
+	CHANGE MASTER TO
+	MASTER_HOST='192.168.1.229',
+	MASTER_USER='replicator',
+	MASTER_PASSWORD='itmd430',
+	MASTER_PORT=3306,
+	MASTER_LOG_FILE='mysql.000001',
+	MASTER_LOG_POS=331,
+	MASTER_CONNECT_RETRY=10;
+	
+12. On Slave in mysql:
+	START SLAVE;
+	
+13. On Master:
+
+CREATE USER 'admin'@'%' IDENTIFIED BY 'itmd430';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'
+WITH GRANT OPTION;

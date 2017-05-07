@@ -1,0 +1,8 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "database"
+    config.vm.network "public_network", ip:"192.168.1.224"
+    config.vm.synced_folder "./data", "/vagrant_data"
+    config.vm.provider "virtualbox" do |vb|
+     vb.memory = "512"
+   end
+end

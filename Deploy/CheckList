@@ -1,0 +1,51 @@
+Check List:
+1. install apache2
+
+2. install php5 libapache2-mod-php5 php5-mcrypt
+
+3. install mysql-server mysql-client (need to create password: itmd430)
+
+4. create a user, writer with all privileges in Master databasa
+
+5. create a user, reader with read privilege in Slave database
+
+6. dump the file, datasbase_schema.sql to both databases
+
+7. set up Master and Slave replication:
+
+Master database:
+a. change the file, /etc/mysql/my.cnf 
+Change "bind-address" to your Master IP
+Uncomment "server-id" and make sure its set to "1"
+Uncomment "log_bin" and set it to "mysql.log"
+Uncomment "binlog_do_db" and set it to "bugoverflow_database"
+b. Restart mysql
+c. Login mysql and run following commands:
+GRANT REPLICATION SLAVE ON *.* TO 'writer'@'%' IDENTIFIED BY 'itmd430';
+FLUSH PRIVILEGES;
+USE bugoverflow_database;
+FLUSH TABLES WITH READ LOCK;
+SHOW MASTER STATUS; (need to write down the file and the position)
+UNLOCK TABLES;
+QUIT;
+
+Slave database:
+a. change the file, /etc/mysql/my.cnf 
+Uncomment "server-id" and make sure its set to "2"
+Uncomment "log_bin" and set it to "mysql.log"
+Uncomment "binlog_do_db" and set it to "bugoverflow_database"
+Add "relay-log = mysql-relay-bin.log"
+b. Restart mysql
+c. Login mysql and run following commands:
+CHANGE MASTER TO MASTER_HOST='??Master IP',
+MASTER_USER='writer',
+MASTER_PASSWORD='itmd430',
+MASTER_PORT=3306,
+MASTER_LOG_FILE='??check from SHOW MASTER STATUS running in Master database',
+MASTER_LOG_POS=??check from SHOW MASTER STATUS running in Master database,
+MASTER_CONNECT_RETRY=10;
+START SLAVE;
+
+8. set up application in Server
+a. download the folder and move it into the folder, /var/www/
+b. change the connection ip address to yours in the file, login.php

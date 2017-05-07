@@ -1,0 +1,14 @@
+build/Web-server-virtualbox-1490125794.box
+*.box
+Database/datasbase_schema.sql
+Deploy/Master-server/data/datasbase_schema.sql
+Deploy/Master-server/Vagrantfile
+Deploy/Slave-server/data/datasbase_schema.sql
+Deploy/Slave-server/Vagrantfile
+Deploy/Web-server/data/datasbase_schema.sql
+Deploy/Web-server/Vagrantfile
+Deploy/Master-server/data/database_schema.sql
+Deploy/Slave-server/data/database_schema.sql
+Deploy/Web-server/data/hzhan121_final project/about.html
+Deploy/Web-server/data/template.php
+Deploy/Web-server/data/*
