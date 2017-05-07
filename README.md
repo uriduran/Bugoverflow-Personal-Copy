@@ -1,9 +1,7 @@
 
 # ITMT 430 Bugoverflow project 2017 spring
 * Uriel Duran - *Developer*
-* Brian Curtis - *Project Manager*
 * Cindy Xie - *UI/UX*
-* Sebrina Neal - *Security*
 * Hong Zhang - *Dev Ops*
 
 # Deploy Infrastructure
