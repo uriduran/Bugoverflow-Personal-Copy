@@ -34,6 +34,4 @@ Any other files needed to be executed like SQL queries should be placed in this 
 
 ### Things To Do ###
 
-1. Currently the default network settings for the VMs is LAN so you will need to manually change it to bridged and modify the IP addresses. Finding a way to do this automatically with commands would be useful.
-2. Finish adding programs to install in the .sh scripts.
-3. Add in to the script the Database creation code (SQL) and the DB slave replication code so it occurs automatically.
+DATABASE REPLICATION WORKS. DEPLOY/DOCUMENTATION/REPLICATION.TXT
